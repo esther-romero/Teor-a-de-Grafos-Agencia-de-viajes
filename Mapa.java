@@ -8,64 +8,70 @@ public class Mapa {
     private int numNodos = 9;
     private ArrayList<Lugar> camino;
     private ArrayList<String> ruta;
-    
-    private ArrayList<String> visitas;
-        
-    public Mapa (ArrayList<String> ruta){
+    private ArrayList<Lugar.Actividad> [] lista;
+       
+    public Mapa (ArrayList<String> ruta, String origen, String destino){
         this.ruta = ruta;
+        camino  =  new ArrayList<>();
         adj = new ArrayList[numNodos];
         for (int i =0;i<numNodos;i++) {
             adj[i] = new ArrayList<>();
         }
-        camino  =  new ArrayList<>();
         
         addDepartamentos();
-        
-        visitas = new ArrayList<>();
-        
-        visitas.add("Mi Teleferico");
-        visitas.add("WMDR Yungas Road");
-        visitas.add("Valle de la Luna");
-        visitas.add("Cerro Rico");//
-        visitas.add("Laguna Colorada");
-        visitas.add("Parque Nacional Torotoro");
-        visitas.add("Samaja National Park");
-        visitas.add("Monumento a la Virgen del Socavon");
-        visitas.add("Reserva de Vida Silvestre Manuripi");
-        visitas.add("Chive");
-        visitas.add("Sena Boliviar");
-        visitas.add("Cachuela esperanza");
-        visitas.add("Puerto Rico");
-        
-        
+        Lugar ori = getConvertido(origen);
         vis = new boolean[numNodos];
         padre = new Lugar [numNodos];
-        padre [0] = new Lugar(" ","",-1);
-        dfs(new Lugar ("Cochabamba","Jorge Wilstermann International Airport (CBB)",0), new Lugar ("Pando","Heroes Del Acre (CIJ)",7),0);
+        padre [ori.getNum()] = new Lugar(" ","",-1);
+        dfs(ori, getConvertido(destino),0);
     }
-
+    
+    private Lugar getConvertido(String nombre){
+        Lugar res;
+        if(nombre.equals("Cochabamba")){
+            res = new Lugar ("Cochabamba","Jorge Wilstermann International Airport (CBB)",0);
+        }else if(nombre.equals("Santa Cruz")){
+            res = new Lugar ("Santa Cruz","Viru Viru Intl (VVI)",1);
+        }else if(nombre.equals("La Paz")){
+            res = new Lugar ("La Paz","El Alto Intl (LPB)",6);
+        }else if(nombre.equals("Oruro")){
+            res = new Lugar ("Oruro","Aeropuerto Juan Mendoza (ORU)",5);
+        }else if(nombre.equals("Beni")){
+            res = new Lugar ("Beni","Jorge Henrich Araúz",8);
+        }else if(nombre.equals("Sucre")){
+            res = new Lugar ("Sucre","Juana Azurduy De Padilla (SRE)",2);
+        }else if(nombre.equals("Tarija")){
+            res = new Lugar ("Tarija","Capitan Oriel Lea Plaza (TJA)",3);
+        }else if(nombre.equals("Potosi")){
+            res = new Lugar ("Potosi","Capitán Nicolás Rojas (POI)",4);
+        }else {
+            res = new Lugar ("Pando","Heroes Del Acre (CIJ)",7);
+        }
+        return res;
+    }
+    
     public void addEdge(Lugar origen,Lugar destino, int pesoV, int pesoF) {
         adj[origen.getNum()].add(new Arista(destino,pesoV,pesoF));
         adj[destino.getNum()].add(new Arista(origen,pesoV,pesoF));
     }
     
     private void addDepartamentos (){
-        addEdge(new Lugar("Cochabamba","Jorge Wilstermann International Airport (CBB)",0),new Lugar ("Santa Cruz","Viru Viru Intl (VVI)",1), 45,12);
-        addEdge(new Lugar("Cochabamba","Jorge Wilstermann International Airport (CBB)",0),new Lugar ("Sucre","Juana Azurduy De Padilla (SRE)",2),45,0);
-        addEdge(new Lugar("Cochabamba","Jorge Wilstermann International Airport (CBB)",0),new Lugar ("Potosi","Capitán Nicolás Rojas (POI)",4),45,0);
-        addEdge(new Lugar("Cochabamba","Jorge Wilstermann International Airport (CBB)",0),new Lugar ("Oruro","Aeropuerto Juan Mendoza (ORU)",5),35,5);
-        addEdge(new Lugar("Cochabamba","Jorge Wilstermann International Airport (CBB)",0),new Lugar ("La Paz","El Alto Intl (LPB)",6),45,8);
-        addEdge(new Lugar("Cochabamba","Jorge Wilstermann International Airport (CBB)",0),new Lugar ("Beni","Jorge Henrich Araúz",8),55,0);
-        addEdge(new Lugar ("Santa Cruz","Viru Viru Intl (VVI)",1),new Lugar ("Beni","Jorge Henrich Araúz",8),45,6);
-        addEdge(new Lugar ("Santa Cruz","Viru Viru Intl (VVI)",1),new Lugar ("Sucre","Juana Azurduy De Padilla (SRE)",2),45,0);
-        addEdge(new Lugar ("Sucre","Juana Azurduy De Padilla (SRE)",2),new Lugar ("Potosi","Capitán Nicolás Rojas (POI)",4),0,0);
-        addEdge(new Lugar ("Sucre","Juana Azurduy De Padilla (SRE)",2),new Lugar ("Tarija","Capitan Oriel Lea Plaza (TJA)",3),0,0);
-        addEdge(new Lugar ("Tarija","Capitan Oriel Lea Plaza (TJA)",3),new Lugar ("Potosi","Capitán Nicolás Rojas (POI)",4),0,0);
-        addEdge(new Lugar ("Potosi","Capitán Nicolás Rojas (POI)",4),new Lugar ("Oruro","Aeropuerto Juan Mendoza (ORU)",5),0,0);
-        addEdge(new Lugar ("Oruro","Aeropuerto Juan Mendoza (ORU)",5),new Lugar ("La Paz","El Alto Intl (LPB)",6),25,3);
-        addEdge(new Lugar ("La Paz","El Alto Intl (LPB)",6),new Lugar ("Pando","Heroes Del Acre (CIJ)",7),0,0);
-        addEdge(new Lugar ("La Paz","El Alto Intl (LPB)",6),new Lugar ("Beni","Jorge Henrich Araúz",8),35,9);
-        addEdge(new Lugar ("Pando","Heroes Del Acre (CIJ)",7),new Lugar ("Beni","Jorge Henrich Araúz",8),0,0); 
+        addEdge(getConvertido("Cochabamba"),getConvertido("Santa Cruz"),45,12);
+        addEdge(getConvertido("Cochabamba"),getConvertido("Sucre"),45,0);
+        addEdge(getConvertido("Cochabamba"),getConvertido("Potosi"),45,0);
+        addEdge(getConvertido("Cochabamba"),getConvertido("Oruro"),35,5);
+        addEdge(getConvertido("Cochabamba"),getConvertido("La Paz"),45,8);
+        addEdge(getConvertido("Cochabamba"),getConvertido("Beni"),55,0);
+        addEdge(getConvertido("Santa Cruz"),getConvertido("Beni"),45,6);
+        addEdge(getConvertido("Santa Cruz"),getConvertido("Sucre"),45,0);
+        addEdge(getConvertido("Sucre"),getConvertido("Potosi"),45,0);
+        addEdge(getConvertido("Sucre"),getConvertido("Tarija"),35,0);
+        addEdge(getConvertido("Tarija"),getConvertido("Potosi"),45,0);
+        addEdge(getConvertido("Potosi"),getConvertido("Oruro"),35,0);
+        addEdge(getConvertido("Oruro"),getConvertido("La Paz"),25,3);
+        addEdge(getConvertido("La Paz"),getConvertido("Pando"),35,0);
+        addEdge(getConvertido("La Paz"),getConvertido("Beni"),35,9);
+        addEdge(getConvertido("Pando"),getConvertido("Beni"),35,0); 
     }
 
     public void dfs(Lugar v, Lugar destino,int cont) {
@@ -87,7 +93,6 @@ public class Mapa {
                 camino.clear();  
                 vis[v.getNum()] = false;
             }
-            
             return;
         }
         for (Arista u : adj[v.getNum()]) {
@@ -99,7 +104,7 @@ public class Mapa {
         vis[v.getNum()] = false;
     }
     
-    public boolean esCamino(ArrayList<Lugar> camino){
+    private boolean esCamino(ArrayList<Lugar> camino){
         boolean res=true;
         int i = 0;
         while (i<camino.size() && res){
@@ -111,9 +116,7 @@ public class Mapa {
     }
     int num;
     public void getViajes(Fecha fechaIni, Fecha fechaFin){   
-        
         System.out.println("\n1) ORGANIZACION DE VIAJE\n");
-        
         System.out.print("Plan de viaje: ");
         
         for(Lugar a : camino){
@@ -142,8 +145,7 @@ public class Mapa {
         fechaIni.restarDia(aumentar);
     }
     
-    private ArrayList<Lugar.Actividad> [] lista;
-    private void llenar(){
+    private void llenar(ArrayList<String> visitas){
         lista = new ArrayList[camino.size()];
         for (int i =1;i<camino.size();i++) {
             lista[i] = new ArrayList<>();
@@ -159,8 +161,8 @@ public class Mapa {
         }
     }
     
-    public void getVisitas(Fecha fec){
-        llenar();
+    public void getVisitas(Fecha fec,ArrayList<String> visitas){
+        llenar(visitas);
         int contDias = 1;
         System.out.println("\n\n2) ORGANIZACION DE VISITAS");
         
@@ -174,10 +176,9 @@ public class Mapa {
                 System.out.println("8:00 hrs.   Desayuno Buffet    Restaurante del Hotel");
                 fec.aumentarDia(1);
                 hora+=1;
-                int contador = 0;
                 int con = 0;
                 while(con!=numAct){
-                    Lugar.Actividad a = lista[i].get(contador); 
+                    Lugar.Actividad a = lista[i].get(con); 
                     System.out.println(hora+":00 hrs   " + a.getNombreActividad());
                     hora += a.getTiempoActividad();
                     con+=1;
@@ -192,7 +193,6 @@ public class Mapa {
                         System.out.println("18:30 hrs  " + " Fin del circuito    Llegada al Hotel");
                     }
                     lista[i].remove(a);
-                    contador++;
                 }
                 contDias++;
             }
@@ -201,14 +201,12 @@ public class Mapa {
     
     public class Arista {
         private Lugar destino;
-        private int pesoFlota,pesoVuelo;
-        private boolean ocupado;
+        private int pesoBus,pesoVuelo;
 
-        public Arista(Lugar destino,int pesoVuelo, int pesoFlota){
+        public Arista(Lugar destino,int pesoVuelo, int pesoBus){
             this.destino   = destino;
             this.pesoVuelo = pesoVuelo;
-            this.pesoFlota = pesoFlota;
-            ocupado = false;
+            this.pesoBus = pesoBus;
         }
 
         public Lugar getDestino(){
@@ -219,16 +217,8 @@ public class Mapa {
             return pesoVuelo;
         }
 
-        public int getPesoFlota(){
-            return pesoFlota;
-        }
-
-        public boolean getOcupado(){
-            return ocupado;
-        }
-
-        public void setOcupado(boolean ocupado){
-            this.ocupado = ocupado;
+        public int getPesoBus(){
+            return pesoBus;
         }
     }
 }
