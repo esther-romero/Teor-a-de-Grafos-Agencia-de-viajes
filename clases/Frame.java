@@ -6,16 +6,16 @@ import javax.imageio.*;
 import java.io.*;
 import java.awt.event.*;
 
-
 public class Frame extends JFrame{
     public Frame(){
+        setVisible(true);
+        
         setBounds(700,300,500,300);
         setResizable(false);
         setTitle("Agencia de viajes");
         Lamina milamina = new Lamina();
         add(milamina);
-        // jp1 = new JPanel(new GridLayout(3, 1, 5, 7));
-        //milamina.setBackground(Color.PINK);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 }
 

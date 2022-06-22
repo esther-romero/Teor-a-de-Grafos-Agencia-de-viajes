@@ -52,28 +52,28 @@ public class Mapa {
         return res;
     }
     
-    public void addEdge(Lugar origen,Lugar destino, int pesoV, int pesoF) {
-        adj[origen.getNum()].add(new Arista(destino,pesoV,pesoF));
-        adj[destino.getNum()].add(new Arista(origen,pesoV,pesoF));
+    public void addEdge(Lugar origen,Lugar destino, int pesoV) {
+        adj[origen.getNum()].add(new Arista(destino,pesoV));
+        adj[destino.getNum()].add(new Arista(origen,pesoV));
     }
     
     private void addDepartamentos (){
-        addEdge(getConvertido("Cochabamba"),getConvertido("Santa Cruz"),45,12);
-        addEdge(getConvertido("Cochabamba"),getConvertido("Sucre"),45,0);
-        addEdge(getConvertido("Cochabamba"),getConvertido("Potosi"),45,0);
-        addEdge(getConvertido("Cochabamba"),getConvertido("Oruro"),35,5);
-        addEdge(getConvertido("Cochabamba"),getConvertido("La Paz"),45,8);
-        addEdge(getConvertido("Cochabamba"),getConvertido("Beni"),55,0);
-        addEdge(getConvertido("Santa Cruz"),getConvertido("Beni"),45,6);
-        addEdge(getConvertido("Santa Cruz"),getConvertido("Sucre"),45,0);
-        addEdge(getConvertido("Sucre"),getConvertido("Potosi"),45,0);
-        addEdge(getConvertido("Sucre"),getConvertido("Tarija"),35,0);
-        addEdge(getConvertido("Tarija"),getConvertido("Potosi"),45,0);
-        addEdge(getConvertido("Potosi"),getConvertido("Oruro"),35,0);
-        addEdge(getConvertido("Oruro"),getConvertido("La Paz"),25,3);
-        addEdge(getConvertido("La Paz"),getConvertido("Pando"),35,0);
-        addEdge(getConvertido("La Paz"),getConvertido("Beni"),35,9);
-        addEdge(getConvertido("Pando"),getConvertido("Beni"),35,0); 
+        addEdge(getConvertido("Cochabamba"),getConvertido("Santa Cruz"),45);
+        addEdge(getConvertido("Cochabamba"),getConvertido("Sucre"),45);
+        addEdge(getConvertido("Cochabamba"),getConvertido("Potosi"),45);
+        addEdge(getConvertido("Cochabamba"),getConvertido("Oruro"),35);
+        addEdge(getConvertido("Cochabamba"),getConvertido("La Paz"),45);
+        addEdge(getConvertido("Cochabamba"),getConvertido("Beni"),55);
+        addEdge(getConvertido("Santa Cruz"),getConvertido("Beni"),45);
+        addEdge(getConvertido("Santa Cruz"),getConvertido("Sucre"),45);
+        addEdge(getConvertido("Sucre"),getConvertido("Potosi"),45);
+        addEdge(getConvertido("Sucre"),getConvertido("Tarija"),35);
+        addEdge(getConvertido("Tarija"),getConvertido("Potosi"),45);
+        addEdge(getConvertido("Potosi"),getConvertido("Oruro"),35);
+        addEdge(getConvertido("Oruro"),getConvertido("La Paz"),25);
+        addEdge(getConvertido("La Paz"),getConvertido("Pando"),35);
+        addEdge(getConvertido("La Paz"),getConvertido("Beni"),35);
+        addEdge(getConvertido("Pando"),getConvertido("Beni"),35); 
     }
 
     public void dfs(Lugar v, Lugar destino,int cont) {
@@ -203,12 +203,11 @@ public class Mapa {
     
     public class Arista {
         private Lugar destino;
-        private int pesoBus,pesoVuelo;
+        private int pesoVuelo;
 
-        public Arista(Lugar destino,int pesoVuelo, int pesoBus){
+        public Arista(Lugar destino,int pesoVuelo){
             this.destino   = destino;
             this.pesoVuelo = pesoVuelo;
-            this.pesoBus = pesoBus;
         }
 
         public Lugar getDestino(){
@@ -217,10 +216,6 @@ public class Mapa {
 
         public int getPesoVuelo(){
             return pesoVuelo;
-        }
-
-        public int getPesoBus(){
-            return pesoBus;
         }
     }
 }
