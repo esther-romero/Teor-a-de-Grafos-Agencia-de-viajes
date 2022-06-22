@@ -1,4 +1,5 @@
-import java.util.ArrayList;
+package clases;
+
 import java.util.*;
 
 public class Mapa {
@@ -9,7 +10,8 @@ public class Mapa {
     private ArrayList<Lugar> camino;
     private ArrayList<String> ruta;
     private ArrayList<Lugar.Actividad> [] lista;
-       
+
+
     public Mapa (ArrayList<String> ruta, String origen, String destino){
         this.ruta = ruta;
         camino  =  new ArrayList<>();
